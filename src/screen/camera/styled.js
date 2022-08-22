@@ -13,6 +13,9 @@ export const CameraOptionContainer = styled.View`
   flex-direction:row;
   padding-left:${Mixins.scaleSize(20)}px;
   padding-right:${Mixins.scaleSize(20)}px ;
+  justify-content:space-around;
+  align-items: center;
+ 
 `;
 
 export const PreviewImage = styled.Image`
@@ -22,5 +25,13 @@ export const PreviewImage = styled.Image`
   border-color: red;
   align-items: center;
   border-radius: 10px;
+  
+`;
+
+export const BackOption = styled.Text`
+  color: ${Colors.BLACK};
+  font-size: ${Mixins.scaleFont(18)}px;
+  font-weight: bold;
+  margin-top: ${Mixins.verticalScaleSize(10)}px;
   
 `;

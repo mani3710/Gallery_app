@@ -6,14 +6,17 @@ import { Mixins } from '../../styles';
 import {
     Container,
     CameraOptionContainer,
-    PreviewImage
+    PreviewImage,
+    BackOption
 } from './styled';
-import { updateGalleryDataList } from '../../redux/reducers/dataReducer';
+import { updateGalleryDataList,updateGalleryImage } from '../../redux/reducers/dataReducer';
 import { useDispatch, useSelector } from 'react-redux';
-const CameraScreen = () => {
+import Toast from 'react-native-simple-toast';
+const CameraScreen = (props) => {
+
     const dispatch = useDispatch();
     const [hasPermission, setHasPermission] = useState(false);
-    const [selectedData, setSelectedData] = useState("");
+    
     const devices = useCameraDevices();
     const camera = useRef(null)
     const device = devices.back;
@@ -21,7 +24,8 @@ const CameraScreen = () => {
     const dataStore = useSelector(state => state.data);
 
     const {
-        galleryDataList
+        galleryDataList,
+        selectedIndexForRead
     } = dataStore;
 
     useEffect(() => {
@@ -32,13 +36,21 @@ const CameraScreen = () => {
     }, []);
 
     const takePhoto = async () => {
+
         const snapshot = await camera.current.takeSnapshot({
             quality: 85,
             skipMetadata: true
-        })
-        setSelectedData(`file://${snapshot.path}`)
+        });
+console.log("snapshot",snapshot);
+      if(props.route?.params?.action == "create"){
         dispatch(updateGalleryDataList(`file://${snapshot.path}`));
-    }
+      }else if(props.route?.params?.action == "read"){
+        dispatch(updateGalleryImage({uri:`file://${snapshot.path}`,selectedIndex:selectedIndexForRead}));
+        Toast.show("Updated successfully");
+        props.navigation.goBack(); 
+      }
+        
+    }   
     const getPreviewURL = () => {
         console.log("galleryDataList",galleryDataList);
         if (galleryDataList.length) {
@@ -46,6 +58,7 @@ const CameraScreen = () => {
         }
         return "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"
     }
+
     return (
         <Container>
             {device != null &&
@@ -65,8 +78,15 @@ const CameraScreen = () => {
                             />
                             <Button
                                 onPress={() => { takePhoto() }}
-                                buttonStyle={{ borderRadius: 150 / 2, width: 80, height: 80, marginLeft: Mixins.scaleSize(50) }}
+                                buttonStyle={{ borderRadius: 150 / 2, width: 80, height: 80, marginLeft: Mixins.scaleSize(30) }}
                                 title={"Take"} />
+
+<Button
+                                onPress={() => { props.navigation.goBack() }}
+                                buttonStyle={{ borderRadius: 10, width: 80, marginLeft: Mixins.scaleSize(30),backgroundColor:"rgba(128, 128, 128,0.3)" }}
+                                title={"Back"} />
+                                
+
                         </CameraOptionContainer>
 
 

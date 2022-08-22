@@ -19,7 +19,8 @@ import moment from "moment";
 const dataSlice = createSlice({
   name: 'data',
   initialState: {
-    galleryDataList:[]
+    galleryDataList:[],
+    selectedIndexForRead:-1
 
   },
   reducers: {
@@ -29,7 +30,14 @@ const dataSlice = createSlice({
      },
      deleteImageFromGallery : (state,action)=>{
       state.galleryDataList.splice(action.payload,1);
-     }
+     },
+     updateSelectedIndexForRead: (state,action)=>{
+      console.log(action.payload);
+      state.selectedIndexForRead=action.payload;
+     },
+     updateGalleryImage: (state,action)=>{
+      state.galleryDataList[action.payload.selectedIndex] = action.payload.uri;
+     },
    
 
   },
@@ -52,6 +60,11 @@ const dataSlice = createSlice({
   },
 });
 
-export const {updateGalleryDataList,deleteImageFromGallery} = dataSlice.actions;
+export const {
+  updateGalleryDataList,
+  deleteImageFromGallery,
+  updateSelectedIndexForRead,
+  updateGalleryImage
+} = dataSlice.actions;
 
 export default dataSlice.reducer;
