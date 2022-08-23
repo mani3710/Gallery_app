@@ -38,10 +38,9 @@ const CameraScreen = (props) => {
     const takePhoto = async () => {
 
         const snapshot = await camera.current.takeSnapshot({
-            quality: 85,
+            quality: 80,
             skipMetadata: true
         });
-console.log("snapshot",snapshot);
       if(props.route?.params?.action == "create"){
         dispatch(updateGalleryDataList(`file://${snapshot.path}`));
       }else if(props.route?.params?.action == "read"){
