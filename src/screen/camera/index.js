@@ -13,6 +13,7 @@ import { updateGalleryDataList,updateGalleryImage } from '../../redux/reducers/d
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import ImageResizer from 'react-native-image-resizer';
+import fs from 'react-native-fs'
 const CameraScreen = (props) => {
 
     const dispatch = useDispatch();
@@ -39,9 +40,10 @@ const CameraScreen = (props) => {
     const takePhoto = async () => {
 
         const snapshot = await camera.current.takePhoto({ });
-       const compressedImage = await ImageResizer.createResizedImage(snapshot.path, 3000, 4000, "JPEG",80,0.0,null)
-        console.log("compressedImage 212",snapshot)
-
+      
+       const compressedImage = await ImageResizer.createResizedImage(snapshot.path, 3000, 4000, "JPEG",80,0.0,null);
+       fs.unlink(snapshot.uri);
+        
       if(props.route?.params?.action == "create"){
         dispatch(updateGalleryDataList(compressedImage)); 
       }else if(props.route?.params?.action == "read"){
