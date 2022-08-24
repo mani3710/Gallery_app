@@ -35,10 +35,10 @@ const CameraScreen = (props) => {
             setHasPermission(status === 'authorized');
         })();
     }, []);
-
+ 
     const takePhoto = async () => {
 
-        const snapshot = await camera.current.takeSnapshot({ });
+        const snapshot = await camera.current.takePhoto({ });
        const compressedImage = await ImageResizer.createResizedImage(snapshot.path, 3000, 4000, "JPEG",80,0.0,null)
         console.log("compressedImage 212",snapshot)
 
